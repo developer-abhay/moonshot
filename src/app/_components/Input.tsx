@@ -17,6 +17,7 @@ const Input: FC<InputProps> = ({ label, type, value, setValue }) => {
         value={value}
         placeholder="Enter"
         onChange={(e) => setValue(e.target.value)}
+        required
       />
     </div>
   );

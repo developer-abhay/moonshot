@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import Header from "./_components/Header";
 
 export const metadata: Metadata = {
   title: "Ecomm User Flow",
@@ -18,10 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <Header />
-        <main className="flex items-center justify-center p-10">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-        </main>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );
