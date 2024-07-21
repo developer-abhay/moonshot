@@ -1,29 +1,98 @@
-# Create T3 App
+# E-Commerce User Authentication and Category Selection
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Overview
 
-## What's next? How do I make an app with this?
+This project demonstrates a simple sign-up and login flow for an e-commerce website. Users can mark categories of interest, which will be stored in a database. The application includes registration, login, and email verification functionality, with a protected page displaying paginated category options.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Technologies Used
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Framework**: Next.js
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **API Handling**: tRPC
+- **UI**: Tailwind CSS
+- **Authentication**: JWT
+- **Email Verification**: Resend
+- **Utilities**: Faker (for generating dummy data), js-cookie, bcrypt, jsonwebtoken, zod
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Setup
 
-## Learn More
+### Environment Variables
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+Create a `.env` file in the root of your project and add the following environment variables:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```sh
+DATABASE_URL="postgresql://<username>:<password>@<host>:<port>/<database>?sslmode=require"
+RESEND_API_KEY="your_resend_api_key"
+TOKEN_SECRET="your_token_secret"
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Installation
 
-## How do I deploy this?
+1. Clone the Repository
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```sh
+   git clone <repository-url>
+```
+
+2. Navigate to the Project Directory
+
+```sh
+cd <project-directory>
+```
+
+3. Install Dependencies
+
+```sh
+npm install
+```
+
+4. Set Up the Database
+
+```sh
+npx prisma migrate dev
+```
+
+5. Seed the Database with Dummy Categories
+
+```sh
+npx prisma db seed
+```
+
+6. Running the Application
+
+```sh
+npm run dev
+```
+
+Navigate to http://localhost:3000 to view the application.
+
+## Features
+
+Registration: Users can sign up by providing their name, email, and password. A verification email with a code is sent to the user for email verification.
+Login: Existing users can log in using their email and password. A JWT token is stored in cookies upon successful login.
+Email Verification: Users must verify their email using a code sent to their inbox.
+Category Selection: Authenticated users can view and select categories of interest from a paginated list. Selected categories are saved in the database.
+Protected Routes: Users are redirected to the login page if not authenticated and trying to access protected routes.
+
+## API Endpoints
+
+POST /api/trpc/user/login: Logs in a user and returns a JWT token.
+POST /api/trpc/user/signup: Registers a new user and sends a verification email.
+POST /api/trpc/user/verify: Verifies the user's email using the verification code.
+GET /api/trpc/user/getCategories: Retrieves a paginated list of categories.
+POST /api/trpc/user/toggleCategory: Toggles the selection status of a category for the user.
+GET /api/trpc/user/getUserCategories: Retrieves the categories selected by the user.
+
+## Deployment
+
+Deploy the application using Vercel or your preferred hosting provider.
+
+Create a New Vercel Project
+Link Your GitHub Repository to Vercel
+Configure the Environment Variables in Vercel
+Deploy the Project
+
+## Contributing
+
+Feel free to submit issues or pull requests. For larger changes, please open an issue to discuss potential modifications.
