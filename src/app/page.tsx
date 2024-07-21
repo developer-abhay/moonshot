@@ -51,8 +51,6 @@ export default function Home() {
     setPageNumber(totalPages);
   };
 
-  console.log(pageNumber);
-
   useEffect(() => {
     if (data) {
       setCategories(data);
@@ -67,7 +65,7 @@ export default function Home() {
           <CardHeading>Please mark your interests!</CardHeading>
           <p className="my-4 text-center">We will keep you notified.</p>
           <h3 className="my-2 text-xl font-medium">My saved interests!</h3>
-          <div className="flex min-h-72 flex-col gap-4">
+          <div className="mt-3 flex min-h-72 flex-col gap-4">
             {isLoading && (
               <p className="mt-10 text-center text-2xl font-bold text-gray-500">
                 Loading...

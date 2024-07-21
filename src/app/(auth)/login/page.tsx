@@ -7,6 +7,7 @@ import Button from "../../_components/Button";
 import Link from "next/link";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const page = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,9 +15,10 @@ const page = () => {
 
   const router = useRouter();
   const { mutate: login, isPending } = api.user.login.useMutation({
-    onSuccess: (user) => {
+    onSuccess: (data) => {
       router.push("/");
-      console.log("logged in as " + user?.name);
+      Cookies.set("token", data?.token!);
+      console.log("logged in as " + data?.user?.name);
     },
     onError: () => {
       console.log("User doesnot exist ");

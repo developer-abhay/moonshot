@@ -1,6 +1,8 @@
 import { sendVerificationEmail } from "@/helpers/resend";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
+import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 
 export const userRouter = createTRPCRouter({
   // login
@@ -15,9 +17,12 @@ export const userRouter = createTRPCRouter({
           password,
         },
       });
-
       if (user) {
-        return user;
+        const tokenData = { email: user.email, name: user.name };
+
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!);
+
+        return { user, token };
       } else {
         return null;
       }
