@@ -30,9 +30,6 @@ const page = () => {
     });
   };
 
-  // if (isSuccess) console.log("User logged In");
-  // if (isError) console.log("Something Went Wrong");
-
   if (isPending) return <p>Loading...</p>;
   return (
     <Card>

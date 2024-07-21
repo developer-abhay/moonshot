@@ -11,7 +11,7 @@ function createCategory() {
 
 async function main() {
   const categories = faker.helpers.multiple(createCategory, {
-    count: 10,
+    count: 100,
   });
   console.log(categories);
 

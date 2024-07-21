@@ -70,4 +70,35 @@ export const userRouter = createTRPCRouter({
         throw new Error("wrong OTP");
       }
     }),
+  //Get all categories
+  getCategories: publicProcedure
+    .input(z.number())
+    .query(async ({ input, ctx }) => {
+      const pageNumber = input;
+      const categories = await ctx.db.category.findMany({
+        take: 6,
+        skip: 6 * (pageNumber - 1),
+      });
+
+      return categories;
+    }),
+  // Select Category
+  selectCategory: publicProcedure
+    .input(z.object({ userID: z.string(), categoryID: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { userID, categoryID } = input;
+
+      const user = await ctx.db.user.update({
+        where: { id: userID },
+        data: {
+          categories: {
+            connect: {
+              id: categoryID,
+            },
+          },
+        },
+      });
+
+      return user;
+    }),
 });
