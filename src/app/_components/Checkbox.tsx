@@ -5,7 +5,7 @@ interface CheckboxProps {
   label: string;
   userID: string;
   categoryID: string;
-  onClick: any;
+  onClick: () => void;
   checked: boolean;
 }
 

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 interface CardButtonProps {
   text: string;
-  onClick: any;
+  onClick: () => void;
 }
 
 const Button: FC<CardButtonProps> = ({ text, onClick }) => {

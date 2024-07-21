@@ -38,8 +38,11 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.db.user.create({
         data: { name, email, password, verifyCode },
       });
-
-      sendVerificationEmail(name, email, verifyCode);
+      try {
+        await sendVerificationEmail(name, email, verifyCode);
+      } catch (error) {
+        console.log({ message: "Cannot send otp" });
+      }
       return user;
     }),
   // verify
@@ -134,6 +137,6 @@ export const userRouter = createTRPCRouter({
         include: { categories: true },
       });
 
-      return user?.categories || [];
+      return user?.categories ?? [];
     }),
 });

@@ -17,7 +17,9 @@ const Page = () => {
   const { mutate: login, isPending } = api.user.login.useMutation({
     onSuccess: (data) => {
       router.push("/");
-      Cookies.set("token", data?.token!);
+      if (data?.token) {
+        Cookies.set("token", data.token);
+      }
       console.log("logged in as " + data?.user?.name);
     },
     onError: () => {
@@ -53,7 +55,7 @@ const Page = () => {
         <Button text="login" onClick={loginUser} />
         <hr className="border-t-[2px] border-[#C1C1C1]" />
         <p className="text=[#333333] mt-3 text-center">
-          Don't have an Account?
+          Dont have an Account?
           <Link
             href="/signup"
             className="ml-2 cursor-pointer font-medium tracking-wide text-black hover:underline"

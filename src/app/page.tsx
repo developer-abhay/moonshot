@@ -142,8 +142,9 @@ export default function Home() {
               className="cursor-pointer hover:text-black"
               onClick={handleBackwardClick}
             />
-            {displayPages.map((page) => (
+            {displayPages.map((page, index) => (
               <span
+                key={index}
                 className={`cursor-pointer hover:text-black ${page === pageNumber ? "text-black" : ""}`}
                 onClick={() => setPageNumber(page)}
               >

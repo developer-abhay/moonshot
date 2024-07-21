@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, KeyboardEvent, ChangeEvent } from "react";
+import React, { useRef, useState } from "react";
 
 type InputProps = {
   length?: number;
@@ -7,11 +7,13 @@ type InputProps = {
 };
 
 const OTPInput = ({ length = 4, onComplete }: InputProps) => {
-  const inputRef = useRef<HTMLInputElement[]>(Array(length).fill(null));
+  const inputRef = useRef<(HTMLInputElement | null)[]>(
+    Array.from({ length }, () => null),
+  );
   const [OTP, setOTP] = useState<string[]>(Array(length).fill(""));
 
   const setRef = (index: number) => (ref: HTMLInputElement | null) => {
-    inputRef.current[index] = ref as HTMLInputElement;
+    inputRef.current[index] = ref!;
   };
 
   const handleTextChange = (input: string, index: number) => {
