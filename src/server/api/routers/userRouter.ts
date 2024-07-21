@@ -2,6 +2,7 @@ import { sendVerificationEmail } from "@/helpers/resend";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 export const userRouter = createTRPCRouter({
   // login
@@ -13,17 +14,20 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.db.user.findUnique({
         where: {
           email,
-          password,
         },
       });
+
       if (user) {
-        const tokenData = { id: user.id, email: user.email, name: user.name };
-
-        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!);
-
-        return { user, token };
+        const matched = await bcrypt.compare(password, user?.password!);
+        if (matched) {
+          const tokenData = { id: user.id, email: user.email, name: user.name };
+          const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!);
+          return { user, token };
+        } else {
+          throw new Error("Wrong Password");
+        }
       } else {
-        return null;
+        throw new Error("No User Found");
       }
     }),
   // signup
@@ -35,11 +39,14 @@ export const userRouter = createTRPCRouter({
       const { name, email, password } = input;
       const verifyCode = Math.floor(Math.random() * 100000000).toString();
 
+      const hashedPass = await bcrypt.hash(password, 10);
+
       const user = await ctx.db.user.create({
-        data: { name, email, password, verifyCode },
+        data: { name, email, password: hashedPass, verifyCode },
       });
       try {
-        await sendVerificationEmail(name, email, verifyCode);
+        const otpSent = await sendVerificationEmail(name, email, verifyCode);
+        console.log(otpSent.success);
       } catch (error) {
         console.log({ message: "Cannot send otp" });
       }

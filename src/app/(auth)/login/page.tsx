@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 const Page = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [inputType, setInputType] = useState("password");
 
   const router = useRouter();
   const { mutate: login, isPending } = api.user.login.useMutation({
@@ -46,12 +47,24 @@ const Page = () => {
       </div>
       <div className="mt-5 flex flex-col gap-8">
         <Input type="email" value={email} label="Email" setValue={setEmail} />
-        <Input
-          type="password"
-          value={password}
-          label="Password"
-          setValue={setPassword}
-        />
+        <div className="relative">
+          <Input
+            type={inputType}
+            value={password}
+            label="Password"
+            setValue={setPassword}
+          />
+          <p
+            className="absolute right-2 top-10 z-10 cursor-pointer text-black underline"
+            onClick={() => {
+              inputType === "text"
+                ? setInputType("password")
+                : setInputType("text");
+            }}
+          >
+            Show
+          </p>
+        </div>
         <Button text="login" onClick={loginUser} />
         <hr className="border-t-[2px] border-[#C1C1C1]" />
         <p className="text=[#333333] mt-3 text-center">

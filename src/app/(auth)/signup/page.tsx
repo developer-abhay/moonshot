@@ -20,6 +20,7 @@ const Page = () => {
     onSuccess: (user) => {
       router.push(`/verify/${user.id}`);
       setName("");
+      localStorage.setItem("email", email);
       setEmail("");
       setPassword("");
       setIsLoading(false);

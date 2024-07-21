@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@/app/_components/Card";
 import CardHeading from "@/app/_components/CardHeading";
 import Button from "@/app/_components/Button";
@@ -9,6 +9,7 @@ import { api } from "@/trpc/react";
 
 const Page = () => {
   const { id } = useParams<{ id: string }>();
+  const [email, setEmail] = useState<string>("");
   const router = useRouter();
 
   const [verifyCode, setVerifyCode] = useState<string>("");
@@ -26,6 +27,17 @@ const Page = () => {
   const verifyUser = () => {
     verify({ userId: id, verifyCode });
   };
+  useEffect(() => {
+    const userEmail = localStorage.getItem("email") as string;
+    let [username, domain] = userEmail.split("@");
+
+    if (!domain) setEmail(email);
+    else {
+      username = username?.slice(0, username.length / 4) + "****";
+      setEmail(`${username}@${domain}`);
+    }
+  }, []);
+
   if (isPending) return <p>Loading....</p>;
   return (
     <Card>
@@ -33,7 +45,7 @@ const Page = () => {
         <CardHeading>Verify your email</CardHeading>
         <p className="my-5">
           Enter the 8 digit code you have received on <br />
-          <span className="font-medium">swa***@gmail.com</span>
+          <span className="font-medium">{email}</span>
         </p>
       </div>
       <div className="mt-5 flex flex-col pb-10">
