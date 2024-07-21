@@ -12,9 +12,14 @@ import { useEffect, useState } from "react";
 import Header from "./_components/Header";
 import { api } from "@/trpc/react";
 import { Category } from "@prisma/client";
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
 
 export default function Home() {
+  const [userID, setUserID] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // Pagination states
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [initialPage, setInitialPage] = useState<number>(1);
   const maxPageCount = 7;
@@ -24,8 +29,14 @@ export default function Home() {
     (_, index) => initialPage + index,
   );
 
+  // hitting backend
   const { data, isLoading } = api.user.getCategories.useQuery(pageNumber);
+  const { data: userCategories } = api.user.getUserCategories.useQuery({
+    userID,
+  });
+  const { mutate: toggleCategory } = api.user.toggleCategory.useMutation();
 
+  // Pageination Functions
   const handleBackwardClick = () => {
     const newStartPage = Math.max(initialPage - maxPageCount, 1);
     setInitialPage(newStartPage);
@@ -51,11 +62,49 @@ export default function Home() {
     setPageNumber(totalPages);
   };
 
+  // Check and Uncheck Categories
+  const toggleSelectedCategory = (categoryID: string) => {
+    setSelectedCategories((prev) => {
+      const isSelected = prev.includes(categoryID);
+
+      const updatedCategories = isSelected
+        ? prev.filter((id) => id !== categoryID)
+        : [...prev, categoryID];
+
+      // Send the updated category status to the server
+      toggleCategory({ userID, categoryID, checked: !isSelected });
+
+      return updatedCategories;
+    });
+  };
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      try {
+        // Decode the token
+        const decodedToken = jwt.decode(token) as { id: string };
+
+        // Access userID from decoded token
+        const userID = decodedToken?.id;
+        setUserID(userID);
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (data) {
       setCategories(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (userCategories) {
+      setSelectedCategories(userCategories.map((category) => category.id));
+    }
+  }, [userCategories]);
 
   return (
     <>
@@ -73,8 +122,15 @@ export default function Home() {
             )}
 
             {!isLoading &&
-              categories.map(({ title }, index) => (
-                <Checkbox key={index} label={title} />
+              categories.map(({ id, title }, index) => (
+                <Checkbox
+                  key={index}
+                  label={title}
+                  userID={userID}
+                  categoryID={id}
+                  checked={selectedCategories.includes(id)}
+                  onClick={() => toggleSelectedCategory(id)}
+                />
               ))}
           </div>
           <div className="mt-10 flex items-center justify-center gap-3 text-xl font-medium text-[#ACACAC]">

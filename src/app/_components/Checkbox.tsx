@@ -3,16 +3,22 @@ import { IoMdCheckmark } from "react-icons/io";
 
 interface CheckboxProps {
   label: string;
+  userID: string;
+  categoryID: string;
+  onClick: any;
+  checked: boolean;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ label }) => {
+const Checkbox: FC<CheckboxProps> = ({ label, onClick, checked }) => {
+  console.log(checked);
   return (
-    <div className="inline-flex items-center gap-2">
+    <div className="inline-flex items-center gap-2" onClick={onClick}>
       <label
         className="relative flex cursor-pointer items-center rounded-full p-1"
         htmlFor={label}
       >
         <input
+          checked={checked}
           type="checkbox"
           className="peer relative h-6 w-6 cursor-pointer appearance-none rounded-md bg-[#CCCCCC] transition-all checked:bg-gray-900"
           id={label}
