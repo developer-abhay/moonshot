@@ -28,8 +28,9 @@ const Page = () => {
     verify({ userId: id, verifyCode });
   };
   useEffect(() => {
-    const userEmail = localStorage.getItem("email") as string;
-    let [username, domain] = userEmail.split("@");
+    const userEmail = localStorage.getItem("email")!;
+    let username = userEmail.split("@")[0];
+    const domain = userEmail.split("@")[1];
 
     if (!domain) setEmail(email);
     else {

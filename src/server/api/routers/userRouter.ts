@@ -18,7 +18,7 @@ export const userRouter = createTRPCRouter({
       });
 
       if (user) {
-        const matched = await bcrypt.compare(password, user?.password!);
+        const matched = await bcrypt.compare(password, user?.password);
         if (matched) {
           const tokenData = { id: user.id, email: user.email, name: user.name };
           const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!);
