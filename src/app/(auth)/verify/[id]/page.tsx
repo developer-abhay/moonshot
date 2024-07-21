@@ -1,14 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Card from "@/app/_components/Card";
 import CardHeading from "@/app/_components/CardHeading";
-import Input from "@/app/_components/Input";
 import Button from "@/app/_components/Button";
 import OtpInput from "@/app/_components/OtpInput";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 
-const page = () => {
+const Page = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
@@ -47,4 +46,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -9,7 +9,7 @@ import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-const page = () => {
+const Page = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -66,4 +66,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

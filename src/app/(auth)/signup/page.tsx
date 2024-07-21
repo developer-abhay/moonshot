@@ -8,7 +8,7 @@ import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const page = () => {
+const Page = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -63,4 +63,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

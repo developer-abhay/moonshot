@@ -2,7 +2,6 @@ import { sendVerificationEmail } from "@/helpers/resend";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
 
 export const userRouter = createTRPCRouter({
   // login

@@ -1,4 +1,3 @@
-import { UseMutateFunction } from "@tanstack/react-query";
 import React, { FC } from "react";
 
 interface CardButtonProps {
